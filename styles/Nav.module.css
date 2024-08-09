@@ -1,0 +1,13 @@
+.nav_bar{
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    color: black;
+}
+
+.nav_logo{
+    width: 6vw;
+    margin-left: 2.5vw;
+    margin-top: 1.5vh;
+}
+
