@@ -44,6 +44,10 @@ export default function Home() {
       window.removeEventListener("wheel", handleScroll);
     };
   }, [scrollLocked, currentSection]);
+  useEffect(() => {
+    setCurrentSection(0)
+  }, [])
+  
 
   return (
     <div
@@ -52,12 +56,25 @@ export default function Home() {
         position: "relative",
       }}
     >
-      <Nav />
+
       <div className="scroll_progress">
-        <div className="scroll_bullet scroll_bullet_active"></div>
-        <div className="scroll_bullet"></div>
-        <div className="scroll_bullet"></div>
-        <div className="scroll_bullet"></div>
+        <div
+          className={`scroll_bullet ${
+            currentSection == 0 ? "scroll_bullet_active" : ""
+          }`}
+        ></div>
+        <div className={`scroll_bullet ${
+            currentSection == 1 ? "scroll_bullet_active" : ""
+          }`}></div>
+        <div className={`scroll_bullet ${
+            currentSection == 2 ? "scroll_bullet_active" : ""
+          }`}></div>
+        <div className={`scroll_bullet ${
+            currentSection == 3 ? "scroll_bullet_active" : ""
+          }`}></div>
+        <div className={`scroll_bullet ${
+            currentSection == 4 ? "scroll_bullet_active" : ""
+          }`}></div>
       </div>
       <div
         className={styles.section}
@@ -66,11 +83,11 @@ export default function Home() {
         <img
           className={`${styles.scroll_knife} ${
             currentSection == 0 ? styles.scroll_knife_h : ""
-          } ${
-            currentSection == 1 || currentSection == 2
-              ? styles.scroll_knife_l
-              : ""
-          } ${currentSection == 4 ? styles.hidden : ""}`}
+          } ${currentSection == 1 ? styles.scroll_knife_l : ""} ${
+            currentSection == 2 ? styles.scroll_knife_l_r : ""
+          } ${currentSection == 3 ? styles.scroll_knife_m_r : ""} ${
+            currentSection == 4 ? styles.hidden : ""
+          }`}
           src="/imgs/knife_nobg.png"
           alt=""
         />
@@ -85,29 +102,27 @@ export default function Home() {
         ref={(el) => (sectionsRef.current[1] = el)}
       >
         <div className="left_text">
-        <span>
-          hotrosinknife is then topped of with a high heat resistant full quartz
-          carved knife that vibrates at the frequency of 32,763 hertz. It is
-          then channeled with precious stones of the highest quality in the
-          world. 
-        </span>
-        <br />
-        <br />
-        <span>
-        fun fact
-        </span>
-        <br />
-        <br />
-        <span>
-        quartz is also known in many different cultures and
-          eras for its healing proprieties and greatly fascinated the great
-          scientist and energy researcher nikola tesla !
-        </span>
+          <span>
+            hotrosinknife is then topped of with a high heat resistant full
+            quartz carved knife that vibrates at the frequency of 32,763 hertz.
+            It is then channeled with precious stones of the highest quality in
+            the world.
+          </span>
+          <br />
+          <br />
+          <span>fun fact</span>
+          <br />
+          <br />
+          <span>
+            quartz is also known in many different cultures and eras for its
+            healing proprieties and greatly fascinated the great scientist and
+            energy researcher nikola tesla !
+          </span>
         </div>
       </div>
       <div
         className={`${styles.second_box} ${styles.section} ${
-          currentSection === 2 ? styles.visible : styles.hidden
+          currentSection === 2 ? styles.visible : styles.visible
         }`}
         ref={(el) => (sectionsRef.current[2] = el)}
       >
@@ -115,7 +130,7 @@ export default function Home() {
       </div>
       <div
         className={`${styles.second_box} ${styles.section} ${
-          currentSection === 3 ? styles.visible : styles.hidden
+          currentSection === 3 ? styles.visible : styles.visible
         }`}
         ref={(el) => (sectionsRef.current[3] = el)}
       >
@@ -123,7 +138,7 @@ export default function Home() {
       </div>
       <div
         className={`${styles.second_box}  ${styles.section} ${
-          currentSection === 4 ? styles.visible : styles.hidden
+          currentSection === 4 ? styles.visible : styles.visible
         }`}
         ref={(el) => (sectionsRef.current[4] = el)}
       >

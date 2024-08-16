@@ -3,11 +3,20 @@
     position: fixed;
     top: 0;
     color: black;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 8vh;
+    z-index: 999;
 }
 
 .nav_logo{
     width: 6vw;
     margin-left: 2.5vw;
-    margin-top: 1.5vh;
 }
 
+.shopping_icon{
+    width: 2.5vw;
+    margin-right: 2.5vw;
+}
