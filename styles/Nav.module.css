@@ -20,3 +20,15 @@
     width: 2.5vw;
     margin-right: 2.5vw;
 }
+@media only screen and (max-width: 768px) {
+    /* Styles for landscape tablets and medium smartphones */
+    .nav_logo{
+        width: 15vw;
+        margin-left: 4.2vw;
+    }
+    
+    .shopping_icon{
+        width:6vw;
+        margin-right: 8vw;
+    }
+  }

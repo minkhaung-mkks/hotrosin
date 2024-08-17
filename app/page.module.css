@@ -44,6 +44,7 @@
 .second_box {
   display: flex;
   flex-direction: column;
+  position: relative;
   justify-content: center;
   align-items: center;
   width: 100vw;
@@ -110,7 +111,7 @@
   top: 25%;
 }
 
-.scroll_knife_l_r{
+.scroll_knife_l_r {
   left: 25%;
   top: 25%;
   transform: rotateZ(180deg);
@@ -120,8 +121,7 @@
   -o-transform: rotateZ(180deg);
 }
 
-.scroll_knife_m_r{
-
+.scroll_knife_m_r {
   transform: rotateZ(180deg);
   -webkit-transform: rotateZ(180deg);
   -moz-transform: rotateZ(180deg);
@@ -174,7 +174,7 @@
   justify-content: space-between;
 }
 .product_info_title h2 {
-  font-size: 2.2rem;
+  font-size: 1.3rem;
   margin-top: 2rem;
 }
 .product_divider {
@@ -189,4 +189,41 @@
   flex-direction: column;
   margin-top: 3vh;
   margin-bottom: 3vh;
+}
+
+@media only screen and (max-width: 768px) {
+  .scroll_knife {
+    width: 5vw;
+    top: 25%;
+  }
+  .product_card {
+    width: 80vw;
+    flex-direction: column;
+    gap: 0rem;
+  }
+
+  .product_img_box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+  .product_img_box img {
+    width: 5%;
+    object-fit: contain;
+  }
+  .product_info_box {
+    width: 86%;
+    margin-top: 0vh;
+  }
+  .product_info_title h2 {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+  }
+  .scroll_knife_l{
+    top: 35%;
+  }
+  .hero_txt{
+    font-size: 2.0rem;
+  }
 }

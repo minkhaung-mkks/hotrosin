@@ -1,8 +1,7 @@
 "use client";
 import { useCart } from "@/context/cartContext";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
-
 
 const ShoppingCart = () => {
   const navigation = useRouter(); // Use the useRouter hook
@@ -16,9 +15,14 @@ const ShoppingCart = () => {
     updateItemCount,
     updateItemVariation,
   } = useCart();
+
+  const [localCart, setLocalCart] = useState([])
   const handleCheckout = () => {
     navigation.push("/checkout"); // Navigate to the checkout page using navigation.push
   };
+useEffect(() => {
+  setLocalCart(cart)
+}, [cart,isVisible])
 
   return (
     <>
@@ -28,6 +32,9 @@ const ShoppingCart = () => {
           <div className="cart">
             <div className="cart_header">
               <h1>Your Cart</h1>
+              <button className="closeCartBtn" onClick={toggleCartVisibility}>
+                x
+              </button>
             </div>
             <div className="cart_items_box">
               <div className="cart_item" style={{ padding: 0 }}>
@@ -35,7 +42,7 @@ const ShoppingCart = () => {
                   className="cart_img_box"
                   style={{
                     backgroundColor: "transparent",
-                    borderRight: "1px solid black",
+                    borderRight: "1px solid white",
                     padding: "0 0% 0 0",
                     margin: "0%",
                     borderRadius: 0,
@@ -55,7 +62,7 @@ const ShoppingCart = () => {
                   style={{
                     width: "42%",
                     backgroundColor: "transparent",
-                    borderRight: "1px solid black",
+                    borderRight: "1px solid white",
                     padding: "0%",
                     margin: "0%",
                     borderRadius: 0,
@@ -79,31 +86,33 @@ const ShoppingCart = () => {
                   <span className="cart_item_name">Count</span>
                 </div>
               </div>
-              <div className="cart_item">
-                <div className="cart_img_box">
-                  <img src="/imgs/knife_nobg_r.png" alt="" />
-                </div>
-                <div className="cart_descript_box">
-                  <span className="cart_item_name">hot rosin knife</span>
-                  <span>
-                    <span className="variant_highlight">spinel</span>
-                  </span>
-                  <span className="cart_item_price">price : $5000</span>
-                </div>
-                <div className="cart_amount_box">
-                  <button>-</button>
-                  <div>
-                    {/* <span className="cart_amount_title">amount</span> */}
-                    <span>1</span>
+              
+              {localCart.length > 0 ? (localCart.map((item, index) => (
+                <div className="cart_item" key={index}>
+                  <div className="cart_img_box">
+                    <img src={item.img} alt={item.name} />
                   </div>
-                  <button>+</button>
+                  <div className="cart_descript_box">
+                    <span className="cart_item_name">{item.name}</span>
+                    <span>
+                      <span className="variant_highlight">{item.variant}</span>
+                    </span>
+                    <span className="cart_item_price">price : ${item.price}</span>
+                  </div>
+                  <div className="cart_amount_box">
+                    <div>
+                      <span>{item.count}</span> {/* Replace with dynamic count */}
+                    </div>
+                    <button onClick={() => removeFromCart(index)}>-</button>
+                    {/* <button onClick={() => updateItemCount(item, item.count - 1)}>-</button>÷ */}
+                    {/* <button onClick={() => updateItemCount(item, item.count + 1)}>+</button> */}
+                  </div>
                 </div>
-              </div>
+              ))) : (<h2 style={{textAlign:"center"}}>no items in cart</h2>)}
             </div>
             <div className="checkout_box">
-              <span>Subtotal : 5000</span>
-              <span>tax: 3%</span>
-              <button onClick={handleCheckout}>Checkout</button>
+              <span>Subtotal : ${localCart.reduce((acc, item) => acc + item.price * item.count, 0)}</span>
+              <button className="addCartBtn" onClick={handleCheckout}>Checkout</button>
             </div>
           </div>
         </>

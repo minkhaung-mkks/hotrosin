@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import { useCart } from "@/context/cartContext";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 const CheckOut = () => {
@@ -14,17 +15,25 @@ const CheckOut = () => {
     deliveryNote: "",
     image: null,
   });
-
-  const [pm, setPM] = useState('pp')
-
-  const cartItems = [
+  const {
+    cart,
+    removeFromCart,
+    clearCart,
+    updateItemCount,
+    updateItemVariation,
+  } = useCart();
+  const [localCart, setLocalCart] = useState([
     {
       name: "hot rosin knife",
       variant: "red spinel",
       price: "5000",
-      count: "4",
+      count: 4,
+      img: "/imgs/knife_nobg_r.png",
     },
-  ];
+    // Add more items if needed
+  ]);
+
+  const [pm, setPM] = useState("pp"); // Current active payment meth
 
   const thaiCities = [
     { value: "Bangkok", label: "Bangkok" },
@@ -57,7 +66,25 @@ const CheckOut = () => {
     { value: "Ratchaburi", label: "Ratchaburi" },
     { value: "Prachuap Khiri Khan", label: "Prachuap Khiri Khan" },
     { value: "Chumphon", label: "Chumphon" },
-    // Add more cities from the comprehensive list provided
+    { value: "Nakhon Sawan", label: "Nakhon Sawan" },
+    { value: "Nakhon Pathom", label: "Nakhon Pathom" },
+    { value: "Saraburi", label: "Saraburi" },
+    { value: "Lopburi", label: "Lopburi" },
+    { value: "Phrae", label: "Phrae" },
+    { value: "Nan", label: "Nan" },
+    { value: "Nong Khai", label: "Nong Khai" },
+    { value: "Ubon Ratchathani", label: "Ubon Ratchathani" },
+    { value: "Buriram", label: "Buriram" },
+    { value: "Mukdahan", label: "Mukdahan" },
+    { value: "Ranong", label: "Ranong" },
+    { value: "Trat", label: "Trat" },
+    { value: "Satun", label: "Satun" },
+    { value: "Narathiwat", label: "Narathiwat" },
+    { value: "Yala", label: "Yala" },
+    { value: "Pattani", label: "Pattani" },
+    { value: "Sakon Nakhon", label: "Sakon Nakhon" },
+    { value: "Kalasin", label: "Kalasin" },
+    { value: "Roi Et", label: "Roi Et" },
   ];
 
   const handleChange = (name, value) => {
@@ -74,16 +101,30 @@ const CheckOut = () => {
     // Add your submit logic here, for example sending data to your backend
   };
 
+  const incrementItemCount = (index) => {
+    updateItemCount(index, localCart[index].count + 1);
+  };
+
+  const decrementItemCount = (index) => {
+    updateItemCount(index, localCart[index].count - 1);
+  };
+
+  const handlePaymentMethodChange = (method) => {
+    setPM(method); // Set the selected payment method
+  };
+
+  useEffect(() => {
+    setLocalCart(cart);
+  }, [cart]);
+
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
-        padding: "20px",
-        marginTop: "6vh",
       }}
+      className="checkout_main"
     >
-      <div className="l_form" style={{ flex: 1, marginRight: "20px" }}>
+      <div className="l_form">
         <h2>Delivery Information</h2>
         <form className="shipping_form" onSubmit={handleSubmit}>
           <div className="field_box">
@@ -110,7 +151,6 @@ const CheckOut = () => {
               />
             </div>
           </div>
-
           <div className="field_box">
             <label htmlFor="postalCode">Postal Code:</label>
             <input
@@ -122,7 +162,6 @@ const CheckOut = () => {
               placeholder="Postal Code"
             />
           </div>
-
           <div className="field_box">
             <label htmlFor="phone">Phone Number:</label>
             <input
@@ -134,7 +173,6 @@ const CheckOut = () => {
               placeholder="Phone Number"
             />
           </div>
-
           <div className="field_box">
             <label htmlFor="email">Email:</label>
             <input
@@ -146,7 +184,6 @@ const CheckOut = () => {
               placeholder="Email"
             />
           </div>
-
           <div className="field_box">
             <label htmlFor="city">City:</label>
             <Select
@@ -155,7 +192,6 @@ const CheckOut = () => {
               placeholder="Select City"
             />
           </div>
-
           <div className="field_box">
             <label htmlFor="address">Address:</label>
             <textarea
@@ -166,7 +202,6 @@ const CheckOut = () => {
               placeholder="Address"
             />
           </div>
-
           <div className="field_box">
             <label htmlFor="deliveryNote">Delivery Note:</label>
             <textarea
@@ -177,9 +212,8 @@ const CheckOut = () => {
               placeholder="Delivery Note"
             />
           </div>
-
           <div className="field_box">
-            <label htmlFor="image">Attach your payment recipet here:</label>
+            <label htmlFor="image">Attach your payment receipt here:</label>
             <input
               type="file"
               id="image"
@@ -189,39 +223,55 @@ const CheckOut = () => {
             />
           </div>
           <div className="field_box">
-            <label htmlFor="">Payment Methods:</label>
+            <label>Payment Methods:</label>
             <div className="pm_box">
-              <button>
-                <img src="/imgs/prompt_pay.png" alt="" className="pm_img pp" />
+              <button
+                type="button"
+                className={`pm_button ${pm === "pp" ? "activeButton" : ""}`}
+                onClick={() => handlePaymentMethodChange("pp")}
+              >
+                <img
+                  src="/imgs/prompt_pay.png"
+                  alt="Prompt Pay"
+                  className="pm_img"
+                />
               </button>
-              <button>
-                <img src="/imgs/bbl.jpg" alt="" className="pm_img pp" />
+              <button
+                type="button"
+                className={`pm_button ${pm === "bbl" ? "activeButton" : ""}`}
+                onClick={() => handlePaymentMethodChange("bbl")}
+              >
+                <img
+                  src="/imgs/bbl.jpg"
+                  alt="Bangkok Bank"
+                  className="pm_img"
+                />
               </button>
             </div>
           </div>
           <div className="payment_box">
-            {pm=="pp" ? (
+            {pm === "pp" ? (
               <>
-              <span className="pMethod">Prompt Pay</span>
-            </>
+                <span className="pMethod">Prompt Pay</span>
+              </>
             ) : (
               <>
-              <span className="pMethod">Bank Transfer</span>
-            <div className="payment_info_box">
-              <span className="pInfoLabel">Bank </span>
-              <span className="pInfo"> : </span>
-              <span className="pInfo pInfoTxt">Bangkok Bank</span>
-            </div>
-            <div className="payment_info_box">
-              <span className="pInfoLabel">Account Number</span>
-              <span className="pInfo">:</span>
-              <span className="pInfo pInfoTxt">12003120310201</span>
-            </div>
-            <div className="payment_info_box">
-              <span className="pInfoLabel">Account Name </span>
-              <span className="pInfo"> : </span>
-              <span className="pInfo pInfoTxt">Khin Maung Nyunt</span>
-            </div>
+                <span className="pMethod">Bank Transfer</span>
+                <div className="payment_info_box">
+                  <span className="pInfoLabel">Bank</span>
+                  <span className="pInfo"> : </span>
+                  <span className="pInfo pInfoTxt">Bangkok Bank</span>
+                </div>
+                <div className="payment_info_box">
+                  <span className="pInfoLabel">Account Number</span>
+                  <span className="pInfo">:</span>
+                  <span className="pInfo pInfoTxt">12003120310201</span>
+                </div>
+                <div className="payment_info_box">
+                  <span className="pInfoLabel">Account Name</span>
+                  <span className="pInfo"> : </span>
+                  <span className="pInfo pInfoTxt">Khin Maung Nyunt</span>
+                </div>
               </>
             )}
           </div>
@@ -229,11 +279,6 @@ const CheckOut = () => {
       </div>
 
       <div
-        style={{
-          flex: 1,
-          marginLeft: "20px",
-          padding: "1vh 2vw",
-        }}
         className="r_form"
       >
         <h2>Your Cart</h2>
@@ -287,10 +332,10 @@ const CheckOut = () => {
               <span className="cart_item_name">Count</span>
             </div>
           </div>
-          {cartItems.map((item, index) => (
-            <div className="cart_item">
+          {localCart.map((item, index) => (
+            <div className="cart_item" key={index}>
               <div className="cart_img_box">
-                <img src="/imgs/knife_nobg_r.png" alt="" />
+                <img src={item.img} alt={item.name} />
               </div>
               <div className="cart_descript_box">
                 <span className="cart_item_name">{item.name}</span>
@@ -300,21 +345,55 @@ const CheckOut = () => {
                 <span className="cart_item_price">price : ${item.price}</span>
               </div>
               <div className="cart_amount_box">
-                <button>-</button>
+                <button onClick={() => decrementItemCount(index)}>-</button>
                 <div>
-                  {/* <span className="cart_amount_title">amount</span> */}
                   <span>{item.count}</span>
                 </div>
-                <button>+</button>
+                <button onClick={() => incrementItemCount(index)}>+</button>
               </div>
             </div>
           ))}
         </div>
         <div className="checkout_total_box">
-          <span>total:</span>
-          <span>taxes:</span>
-          <span>total:</span>
-          <button type="submit">Submit</button>
+          <span className="pInfo">
+            subtotal:
+            <span>
+              ${" "}
+              {localCart.reduce(
+                (acc, item) => acc + item.price * item.count,
+                0
+              )}
+            </span>
+          </span>
+          <span className="pInfo">
+            taxes:
+            <span>
+              $ {" "}
+              {localCart
+                .reduce((acc, item) => acc + item.price * item.count * 0.03, 0)
+                .toFixed(2)}{" "}
+              (3%)
+            </span>
+          </span>
+          <span className="pInfo">
+            delivery fee:
+            <span>$ 100</span>
+          </span>
+          <span className="pInfo">
+            total price:
+            <span>
+              $ {" "}
+              {localCart
+                .reduce(
+                  (acc, item) => acc + item.price * item.count * 1.03 + 100,
+                  0
+                )
+                .toFixed(2)}
+            </span>
+          </span>
+          <button className="addCartBtn" type="submit">
+            Submit
+          </button>
         </div>
       </div>
     </div>
